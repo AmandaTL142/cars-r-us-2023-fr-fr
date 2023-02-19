@@ -26,18 +26,34 @@ public class DeveloperData implements CommandLineRunner {
   }
 
   void makeTestData() {
-    Member m1 = new Member("member1", "test12", "m1@a.dk","xxx", "yyy", "Lyngbyvej 1", "Lyngby", "2800");
-    memberRepository.save(m1);
+    Member m1 = new Member("member1", "test1", "m1@a.dk","xxx", "yyy", "Lyngbyvej 1", "Lyngby", "2800");
+    Member m2 = new Member("member2", "test2", "m2@a.dk","yyy", "zzz", "Odensevej 2", "Odense", "5000");
+    memberRepository.saveAll(List.of(m1, m2));
     memberRepository.save(new Member("kurt-w", "test12", "kw@a.dk","Kurt", "Wonnegut", "Lyngbyvej 34", "Lyngby", "2800"));
     memberRepository.save(new Member("hanne-w", "test12","hw@a.dk", "Hanne", "Wonnegut", "Lyngbyvej 34", "Lyngby", "2800"));
     testTheSimpleTypes();
 
     Car car1 = Car.builder().brand("Volvo").model("V70").pricePrDay(500).bestDiscount(10).build();
-    carRepository.save(car1);
+    Car car2 = Car.builder().brand("Tesla").model("X").pricePrDay(1000).bestDiscount(0).build();
+    carRepository.saveAll(List.of(car1, car2));
     createCars();
 
     //Create a default reservation
     Reservation r = new Reservation(m1,car1, LocalDate.of(2023,12,12));
+    reservationRepository.save(r);
+
+    //Create test reservations
+
+    //m1 lejer c2, m1 har nu lejet to forskellige biler
+    Reservation r1 = new Reservation(m1,car2, LocalDate.of(2023,12,12));
+    reservationRepository.save(r);
+
+    //m1 kan leje car1 på flere dage
+    Reservation r2 = new Reservation(m1,car1, LocalDate.of(2023,11,02));
+    reservationRepository.save(r);
+
+    //car1 lejes af m2, car1 er nu blevet lejet af to forskellige members
+    Reservation r3 = new Reservation(m2,car1, LocalDate.of(2023,9,01));
     reservationRepository.save(r);
 
 
